@@ -1,3 +1,4 @@
+
 import os
 from dotenv import load_dotenv
 import requests
@@ -9,7 +10,7 @@ from io import BytesIO
 
 load_dotenv()
 api_key = os.getenv("WEATHER_API_KEY")
-#example: os.getenv("564386539048502374568")
+# example: os.getenv("564386539048502374568")
 
 city = input("Enter the city name: ")
 
@@ -81,11 +82,11 @@ def update_weather():
         data = response.json()
 
         country = data["location"]["country"]
-        country_info = pycountry.countries.get(name=country)
 
-        if country_info:
+        try:
+            country_info = pycountry.countries.lookup(country)
             country_code = country_info.alpha_2
-        else:
+        except LookupError:
             country_code = country
 
         name = data["location"]["name"]
@@ -125,7 +126,6 @@ def update_weather():
         print("Error:", error)
 
     window.after(300000, update_weather)
-
 
 
 update_weather()
